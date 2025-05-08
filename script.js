@@ -7,10 +7,11 @@ function startQRCodeScanner() {
         if (devices && devices.length) {
             const cameraId = devices[0].id;
 
-            const config = {
-                fps: 10,
-                qrbox: { width: 250, height: 250 }
-            };
+        const config = {
+          fps: 10,
+          qrbox: { width: 200, height: 200 } // 안전한 값
+        };
+
 
             qrScanner.start(cameraId, config, (decodedText, decodedResult) => {
                 console.log(`QR 코드 스캔 성공: ${decodedText}`);
