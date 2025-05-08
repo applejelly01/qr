@@ -1,10 +1,10 @@
 function startQRCodeScanner(deviceId = null) {
     const qrUrlInput = document.getElementById("qr-url");
     const qrScanner = new Html5Qrcode("qr-video");
-    
+
     const config = {
         fps: 10,
-        qrbox: { width: 200, height: 200 },
+        qrbox: { width: 250, height: 250 },
         videoConstraints: deviceId ? { deviceId: { exact: deviceId } } : { facingMode: { ideal: "environment" } }
     };
 
@@ -35,40 +35,35 @@ function setupCameraSelection() {
             select.appendChild(option);
         });
 
-        // 기본 후면 카메라 선택
+        // 기본 후면 카메라 선택 (첫 번째 카메라)
         if (devices.length > 0) {
             startQRCodeScanner(devices[0].id);
+            select.value = devices[0].id;
         }
     }).catch(err => console.error("카메라 장치 검색 오류:", err));
 }
 
-function extractAndSubmit() {
-    const url = document.getElementById("qr-url").value.trim();
-    const regex = /\/([^\/?]+)\?A=([0-9a-zA-Z]+)/;
-    const match = url.match(regex);
-
-    if (match && match[1] && match[2]) {
-        const code1 = match[1];
-        const code2 = match[2];
-        
-        // 구글 시트에 데이터 전송 (Google Apps Script 사용)
-        const scriptURL = "https://script.google.com/a/macros/taean-hs.es.kr/s/AKfycbwMYCgz2izDeLxuxJ7h649BMz_xAXER3M604rDDYKRSRagOO4YktNHWqTcSZQOiJAYT/exec";
-        const formData = new FormData();
-        formData.append("code1", code1);
-        formData.append("code2", code2);
-
-        fetch(scriptURL, { method: "POST", body: formData })
-            .then(response => response.text())
-            .then(result => {
-                document.getElementById("message").innerText = "데이터가 성공적으로 전송되었습니다!";
-            })
-            .catch(error => {
-                document.getElementById("message").innerText = "전송에 실패했습니다. 다시 시도해주세요.";
-                console.error("Error:", error);
-            });
-    } else {
-        alert("올바른 URL 형식이 아닙니다. 예시: http://example.org/GD?A=0034");
+function submitToGoogleSheet() {
+    const qrUrl = document.getElementById("qr-url").value.trim();
+    if (!qrUrl) {
+        alert("QR 코드가 인식되지 않았습니다.");
+        return;
     }
+
+    const scriptURL = "https://script.google.com/a/macros/taean-hs.es.kr/s/AKfycbzNOTWEbhVJff8-EIT6obQoQXj2zgOSeV-afbt62SiGEboAkvcN90XSuv43byhRMCJ2/exec";
+    const formData = new FormData();
+    formData.append("qrUrl", qrUrl);
+
+    fetch(scriptURL, { method: "POST", body: formData })
+        .then(response => response.text())
+        .then(result => {
+            document.getElementById("message").innerText = "데이터가 성공적으로 전송되었습니다!";
+            console.log("데이터 전송 성공:", result);
+        })
+        .catch(error => {
+            document.getElementById("message").innerText = "데이터 전송 실패. 다시 시도해주세요.";
+            console.error("데이터 전송 오류:", error);
+        });
 }
 
 // 페이지 로드 시 카메라 선택 메뉴 설정
