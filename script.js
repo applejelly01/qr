@@ -50,7 +50,7 @@ function submitToGoogleSheet() {
         return;
     }
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwhIP5iwxVQ_n6VDXEY4_fi3jExSz2CIi5Tl5yP330otCK7ApXNyO7ZacMPeT-MbtvI/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwuSaMRz4OWUBw-XOflaJiX5xb7MQJw0oR4c5y_5tpD-x2vzTBbSbJ9R2dDSQ8_HsE3/exec";
     const formData = new FormData();
     formData.append("qrUrl", qrUrl);
 
