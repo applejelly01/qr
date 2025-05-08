@@ -1,3 +1,8 @@
+function calculateQrbox(viewfinderWidth, viewfinderHeight) {
+  const minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
+  return { width: minEdgeSize * 0.6, height: minEdgeSize * 0.6 };
+}
+
 function startQRCodeScanner() {
     const qrUrlInput = document.getElementById("qr-url");
     const qrScanner = new Html5Qrcode("qr-video");
@@ -9,7 +14,7 @@ function startQRCodeScanner() {
 
         const config = {
           fps: 10,
-          qrbox: { width: 200, height: 100 } // 안전한 값
+          qrbox: calculateQrbox
         };
 
 
