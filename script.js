@@ -50,7 +50,7 @@ function submitToGoogleSheet() {
         return;
     }
 
-    const scriptURL = "https://script.google.com/a/macros/taean-hs.es.kr/s/AKfycbxDKWlp7B3s6rXuEHJIG9QIvvl4jgh--IVhU7iWPVkAllUxioXR-nLBu8hay3UqhX8q/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwhIP5iwxVQ_n6VDXEY4_fi3jExSz2CIi5Tl5yP330otCK7ApXNyO7ZacMPeT-MbtvI/exec";
     const formData = new FormData();
     formData.append("qrUrl", qrUrl);
 
