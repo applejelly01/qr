@@ -8,12 +8,12 @@ function startQRCodeScanner() {
         fps: 10,
         qrbox: { width: 250, height: 250 },
         videoConstraints: {
-            facingMode: { exact: "environment" }  // 후면 카메라 강제 사용
+            facingMode: { ideal: "environment" }  // 환경에 맞는 카메라 선택
         }
     };
 
     qrScanner.start(
-        { facingMode: "environment" },  // 후면 카메라 사용
+        { facingMode: { ideal: "environment" } },  // 후면 카메라 우선
         config,
         (decodedText, decodedResult) => {
             console.log(`QR 코드 스캔 성공: ${decodedText}`);
