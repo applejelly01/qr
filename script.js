@@ -9,7 +9,7 @@ function startQRCodeScanner() {
 
         const config = {
           fps: 10,
-          qrbox: { width: 200, height: 200 } // 안전한 값
+          qrbox: { width: 200, height: 100 } // 안전한 값
         };
 
 
