@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR 코드 데이터 추출</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>QR 코드 데이터 추출</h1>
+        <video id="qr-video" class="qr-video" autoplay></video>
+        <p>스캔된 URL:</p>
+        <input type="text" id="qr-url" placeholder="http://example.org/GD?A=0034" readonly>
+        <button onclick="extractAndSubmit()">데이터 전송</button>
+        <div id="message"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
