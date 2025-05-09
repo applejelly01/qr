@@ -1,3 +1,4 @@
+/*
 let qrScanner = null;
 let currentDeviceId = null;
 
@@ -58,6 +59,60 @@ function stopQRCodeScanner() {
             document.getElementById("message").innerText = "";
         });
     }
+}
+*/
+let qrScanner = null;
+let currentDeviceId = null;
+
+function startQRCodeScanner(deviceId = null) {
+    const qrUrlInput = document.getElementById("qr-url");
+    const messageBox = document.getElementById("message");
+    const videoContainer = document.getElementById("qr-video");
+
+    // 스캔 시작 시 메시지 초기화
+    messageBox.innerText = "";
+
+    if (qrScanner) {
+        qrScanner.stop().then(() => console.log("QR 스캐너 중지됨"));
+    }
+
+    qrScanner = new Html5Qrcode("qr-video");
+
+    const config = {
+        fps: 30, // 더 빠른 스캔을 위해 FPS 증가
+        qrbox: { width: 300, height: 300 }, // 더 넓은 스캔 영역
+        aspectRatio: 1.0,
+        experimentalFeatures: {
+            useBarCodeDetectorIfSupported: true, // 바코드 감지기 사용 (더 빠름)
+        },
+        videoConstraints: deviceId
+            ? { deviceId: { exact: deviceId } }
+            : { facingMode: { ideal: "environment" }, width: 1920, height: 1080 } // 고해상도
+    };
+
+    qrScanner.start(
+        deviceId || { facingMode: "environment" },
+        config,
+        (decodedText, decodedResult) => {
+            console.log(`QR 코드 스캔 성공: ${decodedText}`);
+            qrUrlInput.value = decodedText;
+            stopQRCodeScanner();
+        },
+        (errorMessage) => {
+            console.error(`QR 스캔 오류: ${errorMessage}`);
+        }
+    ).catch(err => {
+        console.error(`QR 스캐너 시작 실패: ${err}`);
+        alert("카메라 접근 권한을 허용해 주세요.");
+    });
+
+    // 카메라가 시작될 때 크기 강제 고정
+    setTimeout(() => {
+        const videoElement = videoContainer.querySelector("video");
+        if (videoElement) {
+            videoElement.classList.add("qr-video-canvas");
+        }
+    }, 1000);
 }
 
 function setupCameraSelection() {
