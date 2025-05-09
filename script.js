@@ -53,7 +53,7 @@ function stopQRCodeScanner() {
         qrScanner.stop().then(() => {
             console.log("QR 스캐너 중지됨");
             // 스캔 멈출 때 메시지 지우기
-            document.getElementById("message").innerText = "";
+//            document.getElementById("message").innerText = "";
         });
     }
 }
