@@ -19,10 +19,11 @@ body {
 
 #qr-video {
     width: 100%;
-    height: auto;
+    height: 200px; /* 세로 크기 조정 */
     background-color: black;
     border-radius: 10px;
     margin-bottom: 15px;
+    overflow: hidden;
 }
 
 input {
