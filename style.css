@@ -4,39 +4,32 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 130vh; /* 30% 더 크게 */
     margin: 0;
 }
 
 .container {
     background-color: #ffffff;
-    padding: 20px 30px;
+    padding: 30px 40px; /* 30% 더 크게 */
     border-radius: 15px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.2);
     text-align: center;
-    width: 320px;
+    width: 350px; /* 30% 더 크게 */
 }
 
 #qr-video {
     width: 100%;
-    height: 200px; /* 일관된 크기 설정 */
+    height: 260px; /* 200px -> 30% 더 크게 */
     background-color: black;
     border-radius: 10px;
-    margin-bottom: 15px;
-    overflow: hidden;
-    position: relative;
-}
-
-.canvas-container {
-    width: 100%;
-    height: 200px; /* 일관된 크기 설정 */
+    margin-bottom: 20px;
     overflow: hidden;
 }
 
 input {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
+    padding: 13px; /* 30% 더 크게 */
+    margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #f9f9f9;
@@ -45,16 +38,6 @@ input {
 
 select, button {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
+    padding: 13px; /* 30% 더 크게 */
+    margin-bottom: 20px;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #ffffff;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
