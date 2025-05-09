@@ -16,9 +16,11 @@ function startQRCodeScanner(deviceId = null) {
     qrScanner = new Html5Qrcode("qr-video");
 
     const config = {
-        fps: 10,
+        fps: 15,
         qrbox: { width: 340, height: 255 }, // 30% 더 크게 (260x195 -> 340x255)
-        videoConstraints: deviceId ? { deviceId: { exact: deviceId } } : { facingMode: { ideal: "environment" } }
+        videoConstraints: deviceId
+            ? { deviceId: { exact: deviceId } }
+            : { facingMode: { ideal: "environment" }, width: 1920, height: 1080 } // 고해상도
     };
 
     qrScanner.start(
