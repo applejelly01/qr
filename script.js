@@ -95,7 +95,7 @@ function submitToGoogleSheet() {
         return;
     }
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzJN4EjLDXv7hImj2TYvuD2Vgrt1msiNf8x4NrALT0dmkdzYbgwsHKNlz5JZ_a6o5ykpw/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxZWz6cX4ERTP73On7Bh_qSwNm7t4TjBhDi4N6E_aHGlcSduuNVp6rlgNWXOdA6KMJdNg/exec";
     const formData = new FormData();
     formData.append("qrUrl", qrUrl);
 
