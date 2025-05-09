@@ -5,6 +5,9 @@ function startQRCodeScanner(deviceId = null) {
     const qrUrlInput = document.getElementById("qr-url");
     const messageBox = document.getElementById("message");
 
+    // 스캔 시작 시 메시지 초기화
+    messageBox.innerText = "";
+
     if (qrScanner) {
         qrScanner.stop().then(() => console.log("QR 스캐너 중지됨"));
     }
@@ -13,7 +16,7 @@ function startQRCodeScanner(deviceId = null) {
 
     const config = {
         fps: 10,
-        qrbox: { width: 200, height: 150 },
+        qrbox: { width: 200, height: 150 }, // QR 박스 크기 조정
         videoConstraints: deviceId ? { deviceId: { exact: deviceId } } : { facingMode: { ideal: "environment" } }
     };
 
@@ -24,7 +27,7 @@ function startQRCodeScanner(deviceId = null) {
             console.log(`QR 코드 스캔 성공: ${decodedText}`);
             qrUrlInput.value = decodedText;
             
-            // 스캔 성공 시 카메라 중지
+            // 스캔 성공 시 카메라 중지 및 메시지 지우기
             stopQRCodeScanner();
         },
         (errorMessage) => {
@@ -38,7 +41,11 @@ function startQRCodeScanner(deviceId = null) {
 
 function stopQRCodeScanner() {
     if (qrScanner) {
-        qrScanner.stop().then(() => console.log("QR 스캐너 중지됨"));
+        qrScanner.stop().then(() => {
+            console.log("QR 스캐너 중지됨");
+            // 스캔 멈출 때 메시지 지우기
+            document.getElementById("message").innerText = "";
+        });
     }
 }
 
@@ -76,7 +83,7 @@ function submitToGoogleSheet() {
         return;
     }
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyKLOCLcmmq9FzCUmk0-un4ABBq3u_RgyLcpnBfoaPHsuo0F1YXeDl_2JVE8A3sNNjv0Q/exec";
+    const scriptURL = "https://script.google.com/macros/s/YOUR_GOOGLE_SCRIPT_ID/exec";
     const formData = new FormData();
     formData.append("qrUrl", qrUrl);
 
