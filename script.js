@@ -93,7 +93,7 @@ function submitToGoogleSheet() {
         return;
     }
 
-    const scriptURL = "https://script.google.com/macros/s/YOUR_GOOGLE_SCRIPT_ID/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyKLOCLcmmq9FzCUmk0-un4ABBq3u_RgyLcpnBfoaPHsuo0F1YXeDl_2JVE8A3sNNjv0Q/exec";
     const formData = new FormData();
     formData.append("qrUrl", qrUrl);
 
