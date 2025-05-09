@@ -47,8 +47,12 @@ function startQRCodeScanner(deviceId = null) {
         (errorMessage) => {
             console.error(`QR 스캔 오류: ${errorMessage}`);
         }
-    ).then(stream => {
-        currentStream = stream; // 현재 스트림 저장
+    ).then(() => {
+        // 현재 비디오 스트림 저장
+        const videoElement = document.querySelector("#qr-video video");
+        if (videoElement && videoElement.srcObject) {
+            currentStream = videoElement.srcObject;
+        }
     }).catch(err => {
         console.error(`QR 스캐너 시작 실패: ${err}`);
         alert("카메라 접근 권한을 허용해 주세요.");
@@ -73,8 +77,19 @@ function stopQRCodeScanner() {
     // 미디어 스트림 해제
     if (currentStream) {
         let tracks = currentStream.getTracks();
-        tracks.forEach(track => track.stop());
+        tracks.forEach(track => {
+            track.stop();
+            console.log("스트림 트랙 중지됨:", track);
+        });
         currentStream = null;
+    }
+
+    // 비디오 요소 제거
+    const videoElement = document.querySelector("#qr-video video");
+    if (videoElement) {
+        videoElement.srcObject = null;
+        videoElement.remove();
+        console.log("비디오 요소 제거됨");
     }
 }
 
@@ -160,6 +175,7 @@ window.onbeforeunload = () => {
 
 // 페이지 로드 시 카메라 선택 메뉴 설정
 window.onload = setupCameraSelection;
+
 
 
 
