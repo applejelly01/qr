@@ -99,6 +99,8 @@ function restartQRCodeScanner() {
 
 function submitToGoogleSheet() {
     const qrUrl = document.getElementById("qr-url").value.trim();
+    const messageBox = document.getElementById("message");
+
     if (!qrUrl) {
         alert("QR 코드가 인식되지 않았습니다.");
         return;
@@ -111,22 +113,30 @@ function submitToGoogleSheet() {
     fetch(scriptURL, { method: "POST", body: formData })
         .then(response => response.json())
         .then(result => {
-            const messageBox = document.getElementById("message");
             if (result.status === "success") {
-                messageBox.innerText = result.message;
+                messageBox.innerText = "데이터가 성공적으로 전송되었습니다.";
+                messageBox.style.color = "green";
             } else {
                 messageBox.innerText = "데이터 전송 실패: " + result.message;
+                messageBox.style.color = "red";
             }
 
             // 데이터 전송 후 카메라 다시 시작
-            restartQRCodeScanner();
+            setTimeout(() => {
+                restartQRCodeScanner();
+                messageBox.innerText = ""; // 메시지 초기화
+            }, 2000);
         })
         .catch(error => {
-            document.getElementById("message").innerText = "데이터 전송 실패. 다시 시도해주세요.";
+            messageBox.innerText = "데이터 전송 실패. 다시 시도해주세요.";
+            messageBox.style.color = "red";
             console.error("데이터 전송 오류:", error);
             
             // 오류 발생 시 카메라 다시 시작
-            restartQRCodeScanner();
+            setTimeout(() => {
+                restartQRCodeScanner();
+                messageBox.innerText = ""; // 메시지 초기화
+            }, 2000);
         });
 }
 
@@ -137,8 +147,6 @@ window.onbeforeunload = () => {
 
 // 페이지 로드 시 카메라 선택 메뉴 설정
 window.onload = setupCameraSelection;
-
-
 
 
 
