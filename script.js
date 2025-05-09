@@ -39,8 +39,13 @@ function startQRCodeScanner(deviceId = null) {
         alert("카메라 접근 권한을 허용해 주세요.");
     });
 
-    // 카메라가 시작될 때 크기 고정
-    videoContainer.style.height = "260px"; // 30% 더 크게
+    // 카메라가 시작될 때 크기 강제 고정
+    setTimeout(() => {
+        const videoElement = videoContainer.querySelector("video");
+        if (videoElement) {
+            videoElement.classList.add("qr-video-canvas");
+        }
+    }, 1000);
 }
 
 function stopQRCodeScanner() {
