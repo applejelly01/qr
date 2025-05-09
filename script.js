@@ -17,8 +17,7 @@ function startQRCodeScanner(deviceId = null) {
 
     const config = {
         fps: 10,
-        qrbox: { width: 200, height: 150 }, // QR 박스 크기 조정
-        aspectRatio: 1.5, // 세로 화면 크기 고정
+        qrbox: { width: 260, height: 195 }, // 30% 더 크게 (200x150 -> 260x195)
         videoConstraints: deviceId ? { deviceId: { exact: deviceId } } : { facingMode: { ideal: "environment" } }
     };
 
@@ -41,7 +40,7 @@ function startQRCodeScanner(deviceId = null) {
     });
 
     // 카메라가 시작될 때 크기 고정
-    videoContainer.style.height = "200px";
+    videoContainer.style.height = "260px"; // 30% 더 크게
 }
 
 function stopQRCodeScanner() {
