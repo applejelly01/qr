@@ -4,6 +4,7 @@ let currentDeviceId = null;
 function startQRCodeScanner(deviceId = null) {
     const qrUrlInput = document.getElementById("qr-url");
     const messageBox = document.getElementById("message");
+    const videoContainer = document.getElementById("qr-video");
 
     // 스캔 시작 시 메시지 초기화
     messageBox.innerText = "";
@@ -17,6 +18,7 @@ function startQRCodeScanner(deviceId = null) {
     const config = {
         fps: 10,
         qrbox: { width: 200, height: 150 }, // QR 박스 크기 조정
+        aspectRatio: 1.5, // 세로 화면 크기 고정
         videoConstraints: deviceId ? { deviceId: { exact: deviceId } } : { facingMode: { ideal: "environment" } }
     };
 
@@ -37,6 +39,9 @@ function startQRCodeScanner(deviceId = null) {
         console.error(`QR 스캐너 시작 실패: ${err}`);
         alert("카메라 접근 권한을 허용해 주세요.");
     });
+
+    // 카메라가 시작될 때 크기 고정
+    videoContainer.style.height = "200px";
 }
 
 function stopQRCodeScanner() {
@@ -66,6 +71,7 @@ function setupCameraSelection() {
             const lastDevice = devices[devices.length - 1];
             currentDeviceId = lastDevice.id;
             select.value = currentDeviceId;
+            startQRCodeScanner(currentDeviceId); // 기본 카메라 시작
         }
     }).catch(err => console.error("카메라 장치 검색 오류:", err));
 }
