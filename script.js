@@ -50,7 +50,7 @@ function submitToGoogleSheet() {
         return;
     }
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwS2d8DBQ30IBRU4ecq58J7Wtidn1oi3QnLBuLi2NeKUkHi_Gl6SO74eR15TW69Qzu9Vw/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyP40HG_voOluisR4kbfOWwzu10QRhFYT0dqKz8QJdoVL9RdE94mVQC9mfR2iCuIE_Lwg/exec";
     const formData = new FormData();
     formData.append("qrUrl", qrUrl);
 
@@ -58,7 +58,7 @@ function submitToGoogleSheet() {
         .then(response => response.json())
         .then(result => {
             if (result.status === "success") {
-                document.getElementById("message").innerText = "데이터가 성공적으로 전송되었습니다!";
+                document.getElementById("message").innerText = result.message;
             } else {
                 document.getElementById("message").innerText = "데이터 전송 실패: " + result.message;
             }
@@ -69,7 +69,6 @@ function submitToGoogleSheet() {
             console.error("데이터 전송 오류:", error);
         });
 }
-
 
 // 페이지 로드 시 카메라 선택 메뉴 설정
 window.onload = setupCameraSelection;
