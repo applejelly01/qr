@@ -1,12 +1,8 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    display: flex;
-    justify-content: flex-start; /* 맨 위로 정렬 */
-    align-items: flex-start; /* 맨 위로 정렬 */
-    min-height: 100vh;
     margin: 0;
-    padding-top: 30px; /* 맨 위 여백 */
+    padding: 0;
 }
 
 .container {
@@ -16,6 +12,7 @@ body {
     box-shadow: 0 2px 20px rgba(0,0,0,0.2);
     text-align: center;
     width: 420px; /* 30% 더 크게 */
+    margin: 30px auto; /* 맨 위 정렬 */
 }
 
 #qr-video {
