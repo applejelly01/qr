@@ -32,8 +32,19 @@ function startQRCodeScanner(deviceId = null) {
         config,
         (decodedText, decodedResult) => {
             console.log(`QR 코드 스캔 성공: ${decodedText}`);
-            qrUrlInput.value = decodedText;
-            stopQRCodeScanner();
+            
+            // "schoolreg.org"가 포함된 경우만 입력
+            if (decodedText.includes("schoolreg.org")) {
+                qrUrlInput.value = decodedText;
+                messageBox.innerText = "QR 코드가 성공적으로 인식되었습니다.";
+                messageBox.style.color = "green";
+                
+                // 카메라 즉시 중지
+                stopQRCodeScanner();
+            } else {
+                messageBox.innerText = "유효하지 않은 QR 코드입니다.";
+                messageBox.style.color = "red";
+            }
         },
         (errorMessage) => {
             console.error(`QR 스캔 오류: ${errorMessage}`);
@@ -150,10 +161,10 @@ window.onload = setupCameraSelection;
 
 
 
-
 /*
 let qrScanner = null;
 let currentDeviceId = null;
+let currentStream = null;
 
 function startQRCodeScanner(deviceId = null) {
     const qrUrlInput = document.getElementById("qr-url");
@@ -163,10 +174,8 @@ function startQRCodeScanner(deviceId = null) {
     // 스캔 시작 시 메시지 초기화
     messageBox.innerText = "";
 
-    // 이미 스캐너가 시작된 경우 중지
-    if (qrScanner) {
-        qrScanner.stop().then(() => console.log("QR 스캐너 중지됨"));
-    }
+    // 기존 스트림 중지
+    stopQRCodeScanner();
 
     qrScanner = new Html5Qrcode("qr-video");
 
@@ -188,14 +197,14 @@ function startQRCodeScanner(deviceId = null) {
         (decodedText, decodedResult) => {
             console.log(`QR 코드 스캔 성공: ${decodedText}`);
             qrUrlInput.value = decodedText;
-            
-            // QR 코드 인식 시 카메라 즉시 멈춤
             stopQRCodeScanner();
         },
         (errorMessage) => {
             console.error(`QR 스캔 오류: ${errorMessage}`);
         }
-    ).catch(err => {
+    ).then(stream => {
+        currentStream = stream; // 현재 스트림 저장
+    }).catch(err => {
         console.error(`QR 스캐너 시작 실패: ${err}`);
         alert("카메라 접근 권한을 허용해 주세요.");
     });
@@ -213,7 +222,14 @@ function stopQRCodeScanner() {
     if (qrScanner) {
         qrScanner.stop().then(() => {
             console.log("QR 스캐너 중지됨");
-        });
+        }).catch(err => console.error("QR 스캐너 중지 오류:", err));
+    }
+
+    // 미디어 스트림 해제
+    if (currentStream) {
+        let tracks = currentStream.getTracks();
+        tracks.forEach(track => track.stop());
+        currentStream = null;
     }
 }
 
@@ -247,6 +263,8 @@ function restartQRCodeScanner() {
 
 function submitToGoogleSheet() {
     const qrUrl = document.getElementById("qr-url").value.trim();
+    const messageBox = document.getElementById("message");
+
     if (!qrUrl) {
         alert("QR 코드가 인식되지 않았습니다.");
         return;
@@ -259,24 +277,37 @@ function submitToGoogleSheet() {
     fetch(scriptURL, { method: "POST", body: formData })
         .then(response => response.json())
         .then(result => {
-            const messageBox = document.getElementById("message");
             if (result.status === "success") {
-                messageBox.innerText = result.message;
+                messageBox.innerText = "데이터가 성공적으로 전송되었습니다.";
+                messageBox.style.color = "green";
             } else {
                 messageBox.innerText = "데이터 전송 실패: " + result.message;
+                messageBox.style.color = "red";
             }
 
             // 데이터 전송 후 카메라 다시 시작
-            restartQRCodeScanner();
+            setTimeout(() => {
+                restartQRCodeScanner();
+                messageBox.innerText = ""; // 메시지 초기화
+            }, 2000);
         })
         .catch(error => {
-            document.getElementById("message").innerText = "데이터 전송 실패. 다시 시도해주세요.";
+            messageBox.innerText = "데이터 전송 실패. 다시 시도해주세요.";
+            messageBox.style.color = "red";
             console.error("데이터 전송 오류:", error);
             
             // 오류 발생 시 카메라 다시 시작
-            restartQRCodeScanner();
+            setTimeout(() => {
+                restartQRCodeScanner();
+                messageBox.innerText = ""; // 메시지 초기화
+            }, 2000);
         });
 }
+
+// 페이지를 닫을 때 카메라 스트림 완전히 중지
+window.onbeforeunload = () => {
+    stopQRCodeScanner();
+};
 
 // 페이지 로드 시 카메라 선택 메뉴 설정
 window.onload = setupCameraSelection;
