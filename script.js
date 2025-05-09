@@ -1,5 +1,6 @@
 let qrScanner = null;
 let currentDeviceId = null;
+let currentStream = null;
 
 function startQRCodeScanner(deviceId = null) {
     const qrUrlInput = document.getElementById("qr-url");
@@ -9,9 +10,8 @@ function startQRCodeScanner(deviceId = null) {
     // 스캔 시작 시 메시지 초기화
     messageBox.innerText = "";
 
-    if (qrScanner) {
-        qrScanner.stop().then(() => console.log("QR 스캐너 중지됨"));
-    }
+    // 기존 스트림 중지
+    stopQRCodeScanner();
 
     qrScanner = new Html5Qrcode("qr-video");
 
@@ -38,7 +38,9 @@ function startQRCodeScanner(deviceId = null) {
         (errorMessage) => {
             console.error(`QR 스캔 오류: ${errorMessage}`);
         }
-    ).catch(err => {
+    ).then(stream => {
+        currentStream = stream; // 현재 스트림 저장
+    }).catch(err => {
         console.error(`QR 스캐너 시작 실패: ${err}`);
         alert("카메라 접근 권한을 허용해 주세요.");
     });
@@ -56,7 +58,14 @@ function stopQRCodeScanner() {
     if (qrScanner) {
         qrScanner.stop().then(() => {
             console.log("QR 스캐너 중지됨");
-        });
+        }).catch(err => console.error("QR 스캐너 중지 오류:", err));
+    }
+
+    // 미디어 스트림 해제
+    if (currentStream) {
+        let tracks = currentStream.getTracks();
+        tracks.forEach(track => track.stop());
+        currentStream = null;
     }
 }
 
@@ -77,8 +86,7 @@ function setupCameraSelection() {
             const lastDevice = devices[devices.length - 1];
             currentDeviceId = lastDevice.id;
             select.value = currentDeviceId;
-            // 카메라를 초기 선택한 장치로 설정 (권한 요청 1회로 제한)
-            startQRCodeScanner(currentDeviceId);
+            startQRCodeScanner(currentDeviceId); // 기본 카메라 시작
         }
     }).catch(err => console.error("카메라 장치 검색 오류:", err));
 }
@@ -96,7 +104,7 @@ function submitToGoogleSheet() {
         return;
     }
 
-    const scriptURL = "https://script.google.com/macros/s/YOUR_GOOGLE_SCRIPT_ID/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwulI1eSQ3w6KFWsFrORATRMDR3RmfnV9cwiq3NJ1A2gqSsS0xDp-U1j0AkYv91Ww-Vyg/exec";
     const formData = new FormData();
     formData.append("qrUrl", qrUrl);
 
@@ -122,8 +130,14 @@ function submitToGoogleSheet() {
         });
 }
 
+// 페이지를 닫을 때 카메라 스트림 완전히 중지
+window.onbeforeunload = () => {
+    stopQRCodeScanner();
+};
+
 // 페이지 로드 시 카메라 선택 메뉴 설정
 window.onload = setupCameraSelection;
+
 
 
 
