@@ -33,7 +33,7 @@ body {
 
 .qr-video-canvas {
     width: 100% !important;
-    height: 260px !important;
+    height: 300px !important;    //260
     object-fit: cover !important;
     border-radius: 15px;
 }
