@@ -17,7 +17,7 @@ function startQRCodeScanner(deviceId = null) {
 
     const config = {
         fps: 10,
-        qrbox: { width: 260, height: 195 }, // 30% 더 크게 (200x150 -> 260x195)
+        qrbox: { width: 340, height: 255 }, // 30% 더 크게 (260x195 -> 340x255)
         videoConstraints: deviceId ? { deviceId: { exact: deviceId } } : { facingMode: { ideal: "environment" } }
     };
 
