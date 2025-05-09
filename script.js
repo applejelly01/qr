@@ -13,7 +13,7 @@ function startQRCodeScanner(deviceId = null) {
 
     const config = {
         fps: 10,
-        qrbox: { width: 200, height: 200 },
+        qrbox: { width: 200, height: 150 },
         videoConstraints: deviceId ? { deviceId: { exact: deviceId } } : { facingMode: { ideal: "environment" } }
     };
 
