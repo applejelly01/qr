@@ -139,7 +139,7 @@ function submitToGoogleSheet() {
         return;
     }
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwSRqrru3RnI3P0IgrtytS3DugOjdj2Obo-5uDDeoKKQm9aRQ_et1uoFXLAWlWkiU2HoQ/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyg3c0DeMacHcEAoV4wRFkwMO-UDA0mjQ-47VTL0zFiQr-vW79NhOJ7FSen7Cvc2b494A/exec";
     const formData = new FormData();
     formData.append("qrUrl", qrUrl);
 
@@ -331,3 +331,4 @@ window.onbeforeunload = () => {
 // 페이지 로드 시 카메라 선택 메뉴 설정
 window.onload = setupCameraSelection;
 */
+
